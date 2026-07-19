@@ -1,0 +1,12 @@
+# JetBrains IDEs
+.idea/
+cmake-build-*/
+
+# Python
+__pycache__/
+venv/
+.env
+
+# OneDrive Storage emulation
+storage/*
+!storage/.gitkeep
