@@ -6,25 +6,21 @@
 #include "versionmodel.h"
 #include "globalpartmodel.h"
 #include "componentmodel.h"
-#include "searchproxymodel.h" // Підключаємо нашу нову Proxy модель
+#include "searchproxymodel.h"
 
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
 
-    // Ініціалізація всіх сервісів та базових моделей
     AssetService assetService;
     VehicleModel vehicleModel;
     VersionModel versionModel;
     GlobalPartModel globalPartModel;
     ComponentModel componentModel;
 
-    // --- НАЛАШТУВАННЯ ПОШУКУ (Proxy Model) ---
     SearchProxyModel searchModel;
     searchModel.setSourceModel(&vehicleModel);
-    // Вказуємо, що фільтрація буде відбуватися за полем NameRole
     searchModel.setFilterRole(VehicleModel::NameRole);
 
-    // --- НАЛАШТУВАННЯ ЗВ'ЯЗКІВ (Сигнали та Слоти) ---
     QObject::connect(&assetService, &AssetService::globalPartsFetched,
                      &globalPartModel, [&globalPartModel](const QList<GlobalPart> &parts) {
         globalPartModel.clear();
@@ -41,21 +37,17 @@ int main(int argc, char *argv[]) {
         }
     });
 
-    // Коли AssetService завантажує Версії -> оновлюємо versionModel
     QObject::connect(&assetService, &AssetService::versionsLoaded,
                      &versionModel, [&versionModel](const QString &data) {
-        versionModel.updateData(data.toUtf8()); // Виправляємо тип на QByteArray
+        versionModel.updateData(data.toUtf8());
     });
 
     QQmlApplicationEngine engine;
 
-    // Реєструємо всі об'єкти для доступу з QML
     engine.rootContext()->setContextProperty("assetService", &assetService);
 
-    // 1. Експортуємо ОРИГІНАЛЬНУ модель для оновлення даних (запису)
     engine.rootContext()->setContextProperty("rawVehicleModel", &vehicleModel);
 
-    // 2. Експортуємо PROXY модель для відображення у списку та пошуку (читання)
     engine.rootContext()->setContextProperty("vehicleModel", &searchModel);
 
     engine.rootContext()->setContextProperty("versionModel", &versionModel);

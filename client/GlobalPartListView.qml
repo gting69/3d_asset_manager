@@ -4,7 +4,7 @@ import QtQuick.Layouts
 
 ColumnLayout {
     signal backRequested()
-    signal globalPartSelected(int id) // Сигнал для Main.qml
+    signal globalPartSelected(int id)
 
     Button {
         text: "Back to Versions"

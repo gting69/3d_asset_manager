@@ -9,8 +9,7 @@ class SearchProxyModel : public QSortFilterProxyModel {
 public:
     explicit SearchProxyModel(QObject *parent = nullptr);
 
-    // Метод, який ми викликатимемо з QML при кожному натисканні клавіші
     Q_INVOKABLE void setSearchQuery(const QString &query);
 };
 
-#endif // SEARCHPROXYMODEL_H
+#endif

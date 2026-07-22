@@ -20,7 +20,6 @@ Window {
         initialItem: vehicleListComponent
     }
 
-    // 1. Екран Автомобілів
     Component {
         id: vehicleListComponent
         VehicleListView {
@@ -31,7 +30,6 @@ Window {
         }
     }
 
-    // 2. Екран Версій
     Component {
         id: versionListComponent
         VersionListView {
@@ -43,7 +41,6 @@ Window {
         }
     }
 
-    // 3. Екран Глобальних Частин
     Component {
         id: globalPartListComponent
         GlobalPartListView {
@@ -55,7 +52,6 @@ Window {
         }
     }
 
-    // 4. Екран Компонентів (ФІНАЛ)
     Component {
         id: componentListComponent
         ComponentListView {

@@ -4,7 +4,7 @@ import QtQuick.Layouts
 
 ColumnLayout {
     signal backRequested()
-    signal versionSelected(int id) // Сигнал для Main.qml
+    signal versionSelected(int id)
 
     Button {
         text: "Back"
@@ -33,7 +33,6 @@ ColumnLayout {
                     anchors.fill: parent
                     onClicked: {
                         console.log("Клік по версії. ID:", model.id);
-                        // Просто повідомляємо наверх, що відбувся клік
                         versionSelected(model.id);
                     }
                 }

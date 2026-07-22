@@ -6,14 +6,12 @@ GlobalPartModel::GlobalPartModel(QObject *parent)
 }
 
 void GlobalPartModel::addGlobalPart(const GlobalPart &part) {
-    // Повідомляємо QML, що ми додаємо новий рядок (це важливо для Data Binding)
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     m_parts << part;
     endInsertRows();
 }
 
 void GlobalPartModel::clear() {
-    // Повідомляємо QML, що модель очищується
     beginResetModel();
     m_parts.clear();
     endResetModel();

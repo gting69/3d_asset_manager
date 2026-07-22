@@ -5,7 +5,7 @@
 #include <QString>
 #include <QList>
 
-struct ComponentData { // Назвемо ComponentData, щоб не конфліктувало з іншими бібліотеками
+struct ComponentData {
     int id;
     QString name;
 };
@@ -34,4 +34,4 @@ private:
     QList<ComponentData> m_components;
 };
 
-#endif // COMPONENTMODEL_H
+#endif

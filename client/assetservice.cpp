@@ -38,7 +38,6 @@ void AssetService::fetchVersions(int vehicleId) {
     });
 }
 
-// НОВИЙ МЕТОД: Завантаження Global Parts
 void AssetService::fetchGlobalParts(int versionId) {
     QUrl url(QString("http://127.0.0.1:8000/versions/%1/global-parts").arg(versionId));
     QNetworkReply *reply = networkManager->get(QNetworkRequest(url));
@@ -68,7 +67,6 @@ void AssetService::fetchGlobalParts(int versionId) {
     });
 }
 
-// НОВИЙ МЕТОД: Завантаження Components
 void AssetService::fetchComponents(int globalPartId) {
     QUrl url(QString("http://127.0.0.1:8000/global-parts/%1/components").arg(globalPartId));
     QNetworkReply *reply = networkManager->get(QNetworkRequest(url));
