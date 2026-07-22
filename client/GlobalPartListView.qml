@@ -4,10 +4,10 @@ import QtQuick.Layouts
 
 ColumnLayout {
     signal backRequested()
-    signal versionSelected(int id) // Сигнал для Main.qml
+    signal globalPartSelected(int id) // Сигнал для Main.qml
 
     Button {
-        text: "Back"
+        text: "Back to Versions"
         onClicked: backRequested()
     }
 
@@ -16,25 +16,24 @@ ColumnLayout {
         Layout.fillHeight: true
 
         ListView {
-            id: versionsList
+            id: globalPartsList
             anchors.fill: parent
-            model: versionModel
+            model: globalPartModel
 
             delegate: Rectangle {
                 width: ListView.view.width; height: 50
-                border.color: "blue"
+                border.color: "green"
 
                 Text {
-                    anchors.centerIn: parent;
-                    text: "Version: " + model.name
+                    anchors.centerIn: parent
+                    text: "Global Part: " + model.name
                 }
 
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        console.log("Клік по версії. ID:", model.id);
-                        // Просто повідомляємо наверх, що відбувся клік
-                        versionSelected(model.id);
+                        console.log("Клік по Global Part. ID:", model.id);
+                        globalPartSelected(model.id);
                     }
                 }
             }
@@ -42,10 +41,10 @@ ColumnLayout {
 
         Text {
             anchors.centerIn: parent
-            text: "No versions have been added for this car yet."
+            text: "No global parts have been added for this version yet."
             font.pixelSize: 16
             color: "#808080"
-            visible: versionsList.count === 0
+            visible: globalPartsList.count === 0
         }
     }
 }

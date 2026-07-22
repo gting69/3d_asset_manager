@@ -1,5 +1,7 @@
 #include "assetservice.h"
 #include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QFile>
 #include <QIODevice>
 #include <QDebug>
@@ -36,6 +38,66 @@ void AssetService::fetchVersions(int vehicleId) {
     });
 }
 
+// НОВИЙ МЕТОД: Завантаження Global Parts
+void AssetService::fetchGlobalParts(int versionId) {
+    QUrl url(QString("http://127.0.0.1:8000/versions/%1/global-parts").arg(versionId));
+    QNetworkReply *reply = networkManager->get(QNetworkRequest(url));
+
+    connect(reply, &QNetworkReply::finished, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
+            QList<GlobalPart> partsList;
+
+            if (jsonDoc.isArray()) {
+                QJsonArray jsonArray = jsonDoc.array();
+                for (int i = 0; i < jsonArray.size(); ++i) {
+                    QJsonObject obj = jsonArray[i].toObject();
+                    GlobalPart part;
+                    part.id = obj["id"].toInt();
+                    part.name = obj["name"].toString();
+                    partsList.append(part);
+                }
+            }
+            emit globalPartsFetched(partsList);
+            qDebug() << "Global parts fetched successfully. Count:" << partsList.size();
+        } else {
+            qDebug() << "Error retrieving global parts:" << reply->errorString();
+        }
+        reply->deleteLater();
+    });
+}
+
+// НОВИЙ МЕТОД: Завантаження Components
+void AssetService::fetchComponents(int globalPartId) {
+    QUrl url(QString("http://127.0.0.1:8000/global-parts/%1/components").arg(globalPartId));
+    QNetworkReply *reply = networkManager->get(QNetworkRequest(url));
+
+    connect(reply, &QNetworkReply::finished, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
+            QList<ComponentData> componentsList;
+
+            if (jsonDoc.isArray()) {
+                QJsonArray jsonArray = jsonDoc.array();
+                for (int i = 0; i < jsonArray.size(); ++i) {
+                    QJsonObject obj = jsonArray[i].toObject();
+                    ComponentData comp;
+                    comp.id = obj["id"].toInt();
+                    comp.name = obj["name"].toString();
+                    componentsList.append(comp);
+                }
+            }
+            emit componentsFetched(componentsList);
+            qDebug() << "Components fetched successfully. Count:" << componentsList.size();
+        } else {
+            qDebug() << "Error retrieving components:" << reply->errorString();
+        }
+        reply->deleteLater();
+    });
+}
+
 void AssetService::downloadFile(int versionId, const QString &savePath) {
     QUrl url(QString("http://127.0.0.1:8000/download/%1").arg(versionId));
     QNetworkReply *reply = networkManager->get(QNetworkRequest(url));
@@ -51,7 +113,7 @@ void AssetService::downloadFile(int versionId, const QString &savePath) {
                 qDebug() << "ERROR: Could not open file for writing:" << file.errorString();
             }
         } else {
-            qDebug() << "ERROR: File upload:" << reply->errorString();
+            qDebug() << "ERROR: File download:" << reply->errorString();
         }
         reply->deleteLater();
     });

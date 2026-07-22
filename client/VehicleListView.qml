@@ -11,6 +11,19 @@ ColumnLayout {
         onClicked: assetService.fetchVehicles()
     }
 
+    // --- НОВИЙ ЕЛЕМЕНТ: РЯДОК ПОШУКУ ---
+    TextField {
+        Layout.fillWidth: true
+        Layout.margins: 10
+        placeholderText: "Search auto..."
+        font.pixelSize: 16
+
+        // Коли текст змінюється, викликаємо метод C++ для фільтрації
+        onTextChanged: {
+            vehicleModel.setSearchQuery(text)
+        }
+    }
+
     ListView {
         Layout.fillWidth: true; Layout.fillHeight: true
         model: vehicleModel

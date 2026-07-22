@@ -16,6 +16,12 @@ qt_add_executable(appAssetManagerClient
         vehiclemodel.h
         versionmodel.cpp
         versionmodel.h
+        componentmodel.cpp
+        componentmodel.h
+        globalpartmodel.cpp
+        globalpartmodel.h
+        searchproxymodel.cpp
+        searchproxymodel.h
 )
 
 qt_add_qml_module(appAssetManagerClient
@@ -25,6 +31,8 @@ qt_add_qml_module(appAssetManagerClient
         Main.qml
         VehicleListView.qml
         VersionListView.qml
+        GlobalPartListView.qml
+        ComponentListView.qml
 )
 
 target_link_libraries(appAssetManagerClient PRIVATE
